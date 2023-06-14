@@ -22,65 +22,7 @@
    <view-resolvers>
       <jsp prefix="/WEB-INF/views/" suffix=".jsp" />
    </view-resolvers>
-   
-   <interceptors>
-	<interceptor>
-         <mapping path="/common/loginPost"/>
-         <mapping path="/common/loginPost/**"/>
-         <mapping path="/common/loginPost/**/*"/>
-         <beans:ref bean="loginInterceptor"/>
-      </interceptor>
-      
-      <interceptor>
-         <mapping path="/board/**/*" />
-         <mapping path="/board/**/*?" />
-         <mapping path="/user/**/*" />
-         <mapping path="/user/**?" />
-         <exclude-mapping path="/board/**/*list" />
-         <exclude-mapping path="/board/review/get*" />
-         <beans:ref bean="authInterceptor"/>
-      </interceptor>
-
-      <interceptor>
-         <mapping path="/common/logout" />
-         <beans:ref bean="logoutInterceptor"/>
-      </interceptor>
-   </interceptors>
-   
-   
-   
-   
   
-
-   <beans:bean 
-      id="multipartResolver" 
-      class="org.springframework.web.multipart.commons.CommonsMultipartResolver" >
-      <beans:property name="defaultEncoding" value="utf8"/>
-      <beans:property name="maxInMemorySize" value="10485760"/>
-      <beans:property name="maxUploadSize" value="104857560"/>
-      <beans:property name="maxUploadSizePerFile" value="5242880"/>
-      <beans:property name="preserveFilename" value="true"/>
-      <!--  
-      <beans:property name="uploadTempDir" value="file:/C:/upload/tmp"/>
-      -->
-   </beans:bean>
-   
-   
-	
-	<beans:bean class="java.lang.String" id="uploadPath">
-		<beans:constructor-arg value="C:/Upload" />
-	</beans:bean>
-
-	
-	<!-- 일반 파일 업로드 경로 -->
-	
-	<resources mapping="/imgUpload/**" 	location="resources/imgUpload/" /> 
-  	<resources mapping="/imgs/**" 	location="file:///C:/Upload/" /> 
-	<!-- 현재 / 제거 상태 -->
-
-
-	
-   
    
    <view-controller path="/common/logout" view-name="/common/logout"  status-code="200" />
    <view-controller path="/user/mypage" view-name="user/mypage"  status-code="200" />
@@ -88,6 +30,5 @@
    <context:component-scan base-package="org.zerock.myapp.controller" />
    <context:component-scan base-package="org.zerock.myapp.exception" />
    <context:component-scan base-package="org.zerock.myapp.interceptor" />
-   <context:component-scan base-package="org.zerock.myapp.utils" /> 
    
 </beans:beans>

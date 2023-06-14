@@ -20,7 +20,7 @@
 
 
 	<properties>
-		<java-version>11</java-version>
+		<java-version>17</java-version>
 		<!-- <java-home>${env.JAVA_HOME}</java-home> -->
 
 		<org.springframework-version>5.3.26</org.springframework-version>
