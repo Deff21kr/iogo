@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.zerock.myapp.mapper.PinMapper">
+
+    <insert id="insert">
+    	<selectKey keyProperty="pinNo" order="AFTER" resultType="int">
+        SELECT "ISEQ$$_82986".CURRVAL FROM dual
+        </selectKey>
+        
+        INSERT into tbl_pin(postNo, nickName)
+        VALUES (#{postNo}, #{nickName})
+    </insert>
+
+    <delete id="delete">
+        DELETE FROM tbl_pin WHERE pinNo = #{pinNo}
+    </delete>
+
+    <!-- 목록 -->
+    <select id="selectList" resultType="org.zerock.myapp.domain.PinDTO">
+        SELECT a.pinNo, a.postNo, a.nickName
+        FROM tbl_pin a LEFT OUTER JOIN tbl_groupboard b
+        ON a.postNo = b.postNo
+        WHERE a.nickName = #{nickName}
+    </select>
+
+    <select id="select">
+        SELECT pinno
+        FROM tbl_pin
+        WHERE postNo = #{postNo}
+        and nickName = #{nickName}
+    </select>
+
+    <!-- 찜 목록 확인 -->
+    <select id="checkPin" >
+        SELECT count(pinNo)
+        FROM tbl_pin
+        WHERE postNo = #{postNo}
+        and nickName = #{nickName}
+    </select>
+
+    <!-- <select id="checkPin" resultType="int">
+        SELECT count(pinCount)
+        FROM tbl_pin
+        WHERE postNo = #{postNo}
+        and nickName = #{nickName}
+    </select> -->
+    
+    
+</mapper>

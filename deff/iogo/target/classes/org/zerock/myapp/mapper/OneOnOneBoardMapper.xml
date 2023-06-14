@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+    <mapper namespace="org.zerock.myapp.mapper.OneOnOneBoardMapper">
+        <insert id="insert">
+            <selectKey keyProperty="postNo" order="AFTER" resultType="int">
+                SELECT "ISEQ$$_74527".CURRVAL FROM dual            
+            </selectKey>
+            INSERT INTO tbl_oneononeinquiry(nickName, title, content, repRoot, repStep, repIndent) 
+            VALUES (#{nickName}, #{title}, #{content}, "ISEQ$$_74527".CURRVAL, 0, 0)
+        </insert>
+
+        <select id="select" resultType="org.zerock.myapp.domain.OneOnOneBoardVO">
+            SELECT *
+            FROM tbl_oneononeinquiry
+            where postNo = #{postNo}
+        </select>
+
+        <delete id="delete">
+            DELETE FROM tbl_oneononeinquiry
+            WHERE postNo = #{postNo}
+        </delete>
+
+        <update id="update">
+            UPDATE tbl_oneononeinquiry
+            SET
+                title = #{title},
+                content = #{content},
+                nickName = #{nickName},
+                modifyDate = current_date
+            WHERE
+                postNo = #{postNo}
+        </update>
+
+        <update id="increase">
+            UPDATE tbl_oneononeinquiry
+            SET
+                repStep = repStep + 1
+            WHERE
+                repRoot = #{repRoot} AND repStep > #{repStep}   
+        </update>
+        
+        <insert id="response">
+            <selectKey keyProperty="postNo" order="AFTER" resultType="int">
+                SELECT "ISEQ$$_74527".CURRVAL FROM dual            
+            </selectKey>
+            INSERT INTO tbl_oneononeinquiry(nickName, title, content, repRoot, repStep, repIndent) 
+            VALUES (#{nickName}, #{title}, #{content}, #{repRoot}, #{repStep} + 1, #{repIndent} + 1)
+        </insert>
+        
+
+
+    </mapper>
