@@ -26,74 +26,83 @@
 	src="https://cdnjs.cloudflare.com/ajax/libs/jquery-migrate/3.4.1/jquery-migrate.min.js"></script>
 
 <script>
-	$(document)
-			.ready(
-					function() {
-						var inval_Arr = new Array(2).fill(false);
+	$(document).ready(function() {
+			var inval_Arr = new Array(2).fill(false);
+			// 모든 공백 체크 정규식
+			var empJ = /\s/g;
+			// 비밀번호 정규식
+			var pwJ = /^[A-Za-z0-9]{8,20}$/;
+			// 이메일 검사 정규식
+			var mailJ = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
+			//============== 비밀번호 유효성 검사 ===============//
+			$("#password").blur(function() {
+				var password = $('#password').val();
+				var password2 = $('#password2').val();
 
-						// 모든 공백 체크 정규식
-						var empJ = /\s/g;
+				// 비밀번호 유효성 검사
+				if (password == "") {
+					$('#pw_check').text('비밀번호를 입력해주세요.');
+					$('#pw_check').css('color', 'red');
+					inval_Arr[0] = false;
+				} else if (!pwJ.test(password)) {
+					$('#pw_check').text("영어 대/소문자와 숫자 8~20자리");
+					$('#pw_check').css('color', 'red');
+            					$('#pw_check').css('font-size', '0.8rem');
+					inval_Arr[0] = false;
+				} else {
+					$('#pw_check').text("합격!");
+					$('#pw_check').css('color', 'yellowgreen');
+					inval_Arr[0] = true;
+				}
+			});
 
-						// 비밀번호 정규식
-						var pwJ = /^[A-Za-z0-9]{8,20}$/;
-						// 이메일 검사 정규식
-						var mailJ = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
+			//============== 이메일 유효성 검사 ===============//
+			$("#id").blur(function() {
+				var id = $('#id').val();
+				if (mailJ.test(id)) {
+					inval_Arr[1] = true;
+				} else {
+					$('#id_check').text('아이디를 확인해주세요');
+					$('#id_check').css('color', 'red');
+             				$('#id_check').css('font-size', '0.8rem');
+					inval_Arr[1] = false;
+				}
+			});
 
-						//============== 비밀번호 유효성 검사 ===============//
-						$("#password").blur(function() {
-							var password = $('#password').val();
-							var password2 = $('#password2').val();
+			$('#reg_submit').click(function() {
+				var id = $('#id').val();
+				var pw = $('#pw').val();
+				var validAll = true;
+				for (var i = 0; i < inval_Arr.length; i++) {
 
-							// 비밀번호 유효성 검사
-							if (password == "") {
-								$('#pw_check').text('비밀번호를 입력해주세요.');
-								$('#pw_check').css('color', 'red');
-								inval_Arr[0] = false;
-							} else if (!pwJ.test(password)) {
-								$('#pw_check').text("영어 대/소문자와 숫자 8~20자리");
-								$('#pw_check').css('color', 'red');
-               					$('#pw_check').css('font-size', '0.8rem');
-								inval_Arr[0] = false;
-							} else {
-								$('#pw_check').text("합격!");
-								$('#pw_check').css('color', 'yellowgreen');
-								inval_Arr[0] = true;
-							}
-						});
+					if (inval_Arr[i] == false) { // 유효성 검사를 하나라도 통과하지 못했다면
+						validAll = false;
+						console.log(i + " : " + inval_Arr[i]);
+					}
+				} 
+				
+				 $.ajax({
+				      url: '${pageContext.request.contextPath}/login,
+				      type: 'post',
+				      dataType: 'json',
+				      success: function(data) {
+				        
+				      },
+				      error: function() {
+				        console.log("실패");
+				      }
+				    });
+				 
+				if (validAll) { // 유효성 모두 통과
+					$("#reg_submit").attr("disabled", false);
+				} else {
 
-						//============== 이메일 유효성 검사 ===============//
-						$("#id").blur(function() {
-							var id = $('#id').val();
-							if (mailJ.test(id)) {
-								inval_Arr[1] = true;
-							} else {
-								$('#id_check').text('이메일을 확인해주세요');
-								$('#id_check').css('color', 'red');
-                				$('#id_check').css('font-size', '0.8rem');
-								inval_Arr[1] = false;
-							}
-						});
-
-						$('#reg_submit').click(function() {
-
-							var validAll = true;
-							for (var i = 0; i < inval_Arr.length; i++) {
-
-								if (inval_Arr[i] == false) { // 유효성 검사를 하나라도 통과하지 못했다면
-									validAll = false;
-									console.log(i + " : " + inval_Arr[i]);
-								}
-							}
-
-							if (validAll) { // 유효성 모두 통과
-								$("#reg_submit").attr("disabled", false);
-							} else {
-
-								alert('기각');
-								return false;
-							}
-						});
-					});
+					alert('아이디 또는 비밀번호가 틀립니다.');
+					return false;
+				}
+			});
+			
+		});
 </script>
 
 <style>
@@ -135,18 +144,18 @@
 		<div>
 			<div class="loginform">
 
-				<form action="/common/login" method="post">
+				<form action="/login" method="post">
 
 					<div class="inputbox">
 						아이디 : <input type="text" id="id" class="logininput" name="id"
 							placeholder="아이디를 입력하세요">
 					</div>
-          <div id="id_check"></div>
+        			<div id="id_check"></div>
 					<div class="inputbox">
 						비밀번호 : <input type="password" id="password" class="logininput"
 							name="pw" placeholder="비밀번호를 입력하세요">
 					</div>
-          <div id="pw_check"></div>
+          			<div id="pw_check"></div>
 
 					<div class="loginbutton">
 						<button id="reg_submit">로그인</button>
