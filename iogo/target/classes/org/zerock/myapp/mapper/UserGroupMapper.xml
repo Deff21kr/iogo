@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.zerock.myapp.mapper.UserGroupMapper">
+
+	
+	<!-- 동행신청버튼눌러 유저_그룹 맵핑테이블 생성-->
+	<insert id="insert">
+		<selectKey keyProperty="appNo" order="AFTER" resultType="int">
+			select "ISEQ$$_77353".CURRVAL from dual
+		</selectKey>
+
+		INSERT INTO tbl_user_group
+				(nickName, groupno)
+		VALUES (#{nickName}, #{groupNo} )
+		
+	</insert>
+	
+	<insert id="insertDefault">
+		<selectKey keyProperty="appNo" order="AFTER" resultType="int">
+			select "ISEQ$$_77353".CURRVAL from dual
+		</selectKey>
+		INSERT INTO tbl_user_group
+				(nickName,outcome, groupno)
+		VALUES (#{nickName},'본인' ,#{groupNo} )
+		
+	</insert>
+	
+	<select id="select" resultType="org.zerock.myapp.domain.UserGroupDTO">
+		SELECT *
+		FROM tbl_user_group
+		WHERE appno = #{appNo}
+	</select>
+	
+	<select id="groupCheckID">
+		SELECT COUNT(nickName) 
+		FROM TBL_USER_GROUP
+		WHERE GROUPNO = (SELECT GROUPNO FROM tbl_groups WHERE POSTNO = #{postNo})
+		AND nickName = #{nickName}
+	</select>
+	
+	<update id="update">
+		UPDATE tbl_user_group
+		SET
+			outcome = #{outCome}
+		WHERE appno = #{appNo}
+	</update>
+
+	<delete id="delete">
+		DELETE FROM tbl_user_group WHERE appno=#{appNo} 
+	</delete>
+
+
+
+
+
+</mapper>

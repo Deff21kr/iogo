@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.zerock.myapp.mapper.LikeMapper">
+
+    <insert id="insert" >
+    	<selectKey keyProperty="likeNo" order="AFTER" resultType="int">
+        SELECT "ISEQ$$_83377".CURRVAL FROM dual
+        </selectKey>
+        
+        INSERT into tbl_like(postNo, nickName)
+        VALUES (#{postNo}, #{nickName})
+    </insert>
+
+    <delete id="delete">
+        DELETE FROM tbl_like WHERE likeNo = #{likeNo}
+    </delete>
+
+    <select id="select">
+        SELECT likeNo
+        FROM tbl_like
+        WHERE postNo = #{postNo}
+        and nickName = #{nickName}
+    </select>
+    
+    <select id="checkLike">
+    	SELECT count(likeNo)
+    	FROM tbl_like
+    	WHERE postNo = #{postNo}
+    	and nickName = #{nickName}
+    </select>
+    
+</mapper>

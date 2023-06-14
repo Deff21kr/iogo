@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.zerock.myapp.mapper.GroupMapper">
+
+	<select id="select" resultType="org.zerock.myapp.domain.GroupsDTO">
+		SELECT *
+		FROM tbl_groups
+		WHERE groupno = #{groupNo}
+	</select>
+	
+	<select id="selectPost" resultType="org.zerock.myapp.domain.GroupsDTO">
+		SELECT *
+		FROM tbl_groups
+		WHERE postno = #{postNo}
+	</select>
+	
+	<update id="update">
+		UPDATE tbl_groups
+		SET
+			groupName = #{groupName},
+			recruitStatus = #{recruitStatus},
+			memberNum=#{memberNum},
+			currentMember=#{currentMember},
+			area=#{area}
+		WHERE groupno = #{groupNo}
+	</update>
+	
+	<update id="updateCurrentMem">
+		UPDATE tbl_groups
+		SET
+			currentMember = #{currentMember}
+		WHERE groupno = #{groupNo}
+	</update>
+	
+	<insert id="insert">
+		<selectKey keyProperty="groupNo" order="AFTER" resultType="int">
+			select "ISEQ$$_74662".CURRVAL from dual
+		</selectKey>
+
+		INSERT INTO tbl_groups 
+				(groupname, recruitstatus, membernum, area, postno )
+		VALUES (#{groupName}, #{recruitStatus}, #{memberNum},
+			 #{area}, #{postNo})
+	</insert>
+	
+
+
+	<delete id="delete">
+		DELETE FROM tbl_groups
+		WHERE groupno = #{groupNo}
+	</delete>
+
+	
+
+
+
+</mapper>

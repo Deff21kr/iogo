@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.zerock.myapp.mapper.ReviewCommentMapper">
+	
+	
+	<insert id="insert">
+		<selectKey keyProperty="commentNo" order="AFTER"
+			resultType="int">
+			SELECT ISEQ$$_74709.CURRVAL FROM dual
+		</selectKey>
+		
+		insert into tbl_reviewcomment (content, nickName, postNo)
+		values(#{content, jdbcType=VARCHAR}, #{nickName, jdbcType=VARCHAR}, #{postNo, jdbcType=NUMERIC})
+	</insert>
+
+	<select id="select"
+		resultType="org.zerock.myapp.domain.ReviewCommentVO">
+
+		SELECT * FROM tbl_reviewcomment WHERE postNo = #{postNo} ORDER BY
+		MODFIYDATE DESC, REGIDATE DESC
+	</select>
+
+	<delete id="delete">
+		DELETE FROM tbl_reviewcomment WHERE commentNo = #{commentNo}
+	</delete>
+
+	<update id="update">
+		UPDATE tbl_reviewcomment
+		SET
+		content = #{content},
+		MODFIYDATE = current_date
+		WHERE commentNo = #{commentNo}
+	</update>
+
+</mapper>

@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.zerock.myapp.mapper.UsersMapper">
+
+	<select id="select" resultType="org.zerock.myapp.domain.UsersVO">
+		SELECT *
+		FROM tbl_users
+		WHERE id =
+		#{ID}
+	</select>
+
+	<select id="selectByNick"
+		resultType="org.zerock.myapp.domain.UsersVO">
+		SELECT *
+		FROM tbl_users
+		WHERE nickname = #{nickName}
+	</select>
+
+	<insert id="insert">
+		<selectKey keyProperty="uno" order="AFTER" resultType="int">
+			select "ISEQ$$_74653".CURRVAL from dual
+		</selectKey>
+
+		INSERT INTO tbl_users
+		(id, nickname, name,
+		password, gender, email,
+		phonenumber, birthdate, MBTI, likeArea )
+		VALUES (#{ID}, #{nickName},
+		#{name},
+		#{password}, #{gender}, #{EMail},
+		#{phoneNumber}, #{birthDate},
+		#{MBTI}, #{likeArea})
+
+	</insert>
+
+
+	<delete id="delete">
+		DELETE FROM tbl_users
+		WHERE id = #{ID}
+	</delete>
+
+	<update id="update">
+		UPDATE tbl_users
+		SET
+		name = #{name},
+		password=#{password},
+		email=#{EMail},
+		phoneNumber=#{phoneNumber}
+		filename=#{fileName,jdbcType=VARCHAR}
+		<if test="MBTI != null">
+			,MBTI=#{MBTI}
+		</if>
+		<if test="likeArea != null">
+			,likeArea=#{likeArea}
+		</if>
+
+		WHERE id = #{ID}
+	</update>
+
+	<select id="checkID" resultType="int">
+		SELECT count(id) FROM tbl_users
+		where id = #{ID}
+	</select>
+
+	<select id="checkNickName" resultType="int">
+		SELECT count(nickName)
+		FROM tbl_users where nickName = #{nickName}
+	</select>
+
+	<update id="profileEdit">
+		UPDATE tbl_users
+		SET
+		<if test="statusMessage != null">
+			statusMessage = #{statusMessage}
+		</if>
+		<if test="MBTI != null">
+			,MBTI=#{MBTI}
+		</if>
+		<if test="likeArea != null">
+			,likeArea=#{likeArea}
+		</if>
+		WHERE ID = #{ID}
+	</update>
+
+
+	<update id="changepw">
+		UPDATE tbl_users
+		SET
+		password=#{password}
+		WHERE ID = #{ID}
+	</update>
+	
+	<select id="checkUserName" resultType="int">
+		SELECT count(name) FROM tbl_users
+		where name = #{name}
+	</select>
+
+	<select id="checkUserEMail" resultType="int">
+		SELECT count(EMail) FROM tbl_users
+		where EMail = #{EMail}
+	</select>
+	
+	<select id="showId" resultType="String">
+		SELECT id FROM tbl_users
+		WHERE name = #{name} AND EMail = #{EMail}
+	</select>
+
+	<select id="checkUserId" resultType="int">
+		SELECT count(ID) FROM tbl_users
+		where ID = #{ID}
+	</select>
+	
+	<select id="nameEMail" resultType="int">
+		SELECT count(name) FROM tbl_users
+		where name = #{name} AND EMail = #{EMail}
+	</select>
+	
+	<select id="IDEMail" resultType="int">
+		SELECT count(ID) FROM tbl_users
+		where ID = #{ID} AND EMail = #{EMail} AND name = #{name}
+	</select>
+
+
+
+
+</mapper>

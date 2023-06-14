@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+    <mapper namespace="org.zerock.myapp.mapper.MyPlanMapper">
+   
+     <insert id="make" >
+        <selectKey keyProperty="planNo" order="AFTER" resultType="int">
+            SELECT "ISEQ$$_74701".CURRVAL FROM dual  
+        </selectKey>
+        
+        INSERT INTO TBL_MYPLAN (PLANNAME, STARTDATE, ENDDATE, NICKNAME, DURATION) 
+        VALUES ( #{planName}, #{startDate}, #{endDate}, #{nickName}, #{endDate, jdbcType=DATE} - #{startDate, jdbcType=DATE} + 1)
+    </insert>
+
+
+    <select id="select">
+        SELECT * FROM TBL_MYPLAN WHERE PLANNO = #{planNo}
+    </select>
+    
+    
+    <select id="selectList" resultType="org.zerock.myapp.domain.MyPlanVO">
+   		SELECT *
+		FROM tbl_myplan 
+		WHERE nickName = #{nickName} AND endDate > current_date    
+		ORDER BY startDate ASC 
+		OFFSET ( #{cri.currPage} - 1 ) * #{cri.amount} ROWS 
+		FETCH NEXT #{cri.amount} ROWS ONLY
+    </select> 
+    
+
+    </mapper>
