@@ -4,6 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,6 +26,11 @@ public class CommonController {
 	
 	@Autowired
 	private UserService user;
+	
+	@GetMapping("/main")
+	public void main() {
+		System.out.println("main");
+	}
 	
 	@GetMapping("/login")
 	public String login() {
@@ -56,7 +62,7 @@ public class CommonController {
 				log.info("\nSESS_DEPT_CD : {} ",session.getAttribute("SESS_DEPT_CD"));
 				
 				log.info("\ndto : {} ,model : {}", dto, model);
-				return "/main";
+				return "redirect:/main";
 			} else {
 				model.addAttribute("__RESULT__", "로그인 실패.");
 				return "/common/login"; // 다시 로그인 페이지로
@@ -66,20 +72,53 @@ public class CommonController {
 		}
 	} // post_login
 	
+	@PostMapping("/logout")
+	public ResponseEntity<Integer> logout(HttpServletRequest req) throws ControllerException {
+		log.info("logout ::::");
+		
+		try {
+			HttpSession session = req.getSession(false);
+			if(session !=null ) {
+				log.info("로그아웃 성공");
+				session.invalidate();
+				return ResponseEntity.ok(1);
+			} else {
+				log.info("로그아웃 실패");
+				return ResponseEntity.ok(0);
+			}
+			
+		} catch (Exception e) {
+			throw new ControllerException(e);
+		}
+		
+	}
+	
 	@GetMapping("/join")
 	public String join() {
 		return "/common/join";
 	}// get_join
 	
+//	@PostMapping("/join")
+//	public Integer join(UserDTO dto) throws ControllerException {
+//		log.info("\n 컨트롤러 회원가입 정보 : {} ",dto);
+//		try {
+//			return this.user.register(dto);
+//		} catch (Exception e) {
+//			throw new ControllerException(e);
+//		}
+//	}// post_join
+	
 	@PostMapping("/join")
-	public Integer join(UserDTO dto) throws ControllerException {
-		log.info("\n 컨트롤러 회원가입 정보 : {} ",dto);
-		try {
-			return this.user.register(dto);
-		} catch (Exception e) {
-			throw new ControllerException(e);
-		}
-	}// post_join
+	@ResponseBody
+	public ResponseEntity<Integer> join(UserDTO dto) throws ControllerException {
+	    log.info("\n 컨트롤러 회원가입 정보 : {} ", dto);
+	    try {
+	        Integer result = this.user.register(dto);
+	        return ResponseEntity.ok(result);
+	    } catch (Exception e) {
+	        throw new ControllerException(e);
+	    }
+	}
 	
 	@GetMapping("/idcheck")
 	@ResponseBody

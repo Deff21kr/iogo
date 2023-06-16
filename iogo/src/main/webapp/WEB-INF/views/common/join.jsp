@@ -58,6 +58,26 @@
 	font-size: 0.7rem;
 	color: red;
 }
+.inputbox span {
+	display:inline-block;
+	width: 30%;
+	text-align: left;
+}
+.inputbox input {
+	display:inline-block;
+	width:30%;
+}
+.inputbox select {
+	display:inline-block;
+	width:30%;
+	text-align: center;
+}
+.loginbutton button {
+	margin : 10px auto;
+	width : 60px;
+}
+
+
 </style>
 
 </head>
@@ -71,9 +91,8 @@
 
 		<div>
 			<div class="joinForm">
-
 					<div class="inputbox">
-						<span>아이디 :</span> <input type="text" id="id" class="joininput" name="id" placeholder="아이디를 입력하세요.">
+						<span>아이디 :</span> <input type="text" id="id" class="joininput" name="id" placeholder="example@example.com">
 						<div id="id_check" class="check"></div>
 					</div>
 					
@@ -91,7 +110,7 @@
 					</div>
 					<div class="inputbox">
 						<span>성별 :</span>
-						<select name="gender" required>
+						<select id="gender" name="gender" required>
 							<option value="">성별</option>
 							<option value="M">남성</option>
 							<option value="F">여성</option>
@@ -99,7 +118,7 @@
 					</div>
 					<div class="inputbox">
 						<span>권한 :</span> 
-						<select name="auth" required>
+						<select id="auth" name="auth" required>
 							<option value="" >권한</option>
 							<option value="01">자료요청자</option>
 							<option value="02">부서책임자</option>
@@ -108,7 +127,7 @@
 					</div>
 					<div class="inputbox" >
 						<span>부서 :</span>
-						<select name="dept" required>
+						<select id="dept" name="dept" required>
 							<option value="">부서</option>
 							<option value="A001">운영부서</option>
 							<option value="B001">지원부서</option>
@@ -119,11 +138,11 @@
 			</div>
 			
 			<div class="loginbutton">
-				<button id="reg_submit">등록</button>
-				<button id="cancel" >취소</button>
+				<button type="button" id="reg_submit">등록</button>
+				<button type="button" id="cancel" >취소</button>
 			</div>
-
 		</div>
+					
 
 	</div>
 
@@ -157,7 +176,7 @@
 		      return;
 		    }
 		    if (!mailJ.test(id)) {
-		      $('#id_check').text("영어 대/소문자와 숫자 8~16자리");
+		      $('#id_check').text("이메일형식으로 입력바랍니다.");
 		      $('#id_check').css('color', 'red');
 		      inval_Arr[0] = false;
 		      return;
@@ -236,59 +255,17 @@
 		    }
 		  });
 
-		  //============== 이메일 유효성 검사 ===============//
-		  $("#EMail").blur(function() {
-		    var EMail = $('#EMail').val();
-		    if (mailJ.test(EMail)) {
-		      $('#mail_check').text('인증번호를 입력해주세요!');
-		      $('#mail_check').css('color', 'yellowgreen');
-		    } else {
-		      $('#mail_check').text('이메일을 확인해주세요');
-		      $('#mail_check').css('color', 'red');
-		    }
-		  });
-
-		//   ============ 이메일 인증 ===================
-              let code = ''; 
-		  $('#mail_Check_Btn').click(function() {
-				const EMail = $('#EMail').val(); // 이메일 주소값 얻어오기!
-				console.log('완성된 이메일 : ' + EMail); // 이메일 오는지 확인
-				const checkInput = $('#mail_Check_Input') // 인증번호 입력하는곳 
-	
-
-				$.ajax({
-					type : 'get',
-					url : "${pageContext.request.contextPath}/common/mailCheck?EMail="+EMail, // GET방식이라 Url 뒤에 email을 뭍힐수있다.
-                          
-					success : function (data) {
-						console.log("data : " +  data);
-						checkInput.attr('disabled',false);
-						code =data;
-						alert('인증번호가 전송되었습니다.')
-					}			
-				}); // end ajax
-			}); // end send eamil
-			
-			$('#mail_Check_Input').blur(function () {
-				const inputCode = $('#mail_Check_Input').val();
-				const $resultMsg = $('#mail_check_num');
-				
-				if(inputCode == code){
-					$resultMsg.html('인증번호가 일치합니다.');
-					$resultMsg.css('color','green');
-					$('#mail_Check_Btn').attr('disabled',true);
-					$('#EMail').attr('readonly',true);
-					
-				}else{
-					$resultMsg.html('인증번호가 불일치 합니다. 다시 확인해주세요!.');
-					$resultMsg.css('color','red');
-				}
-			});
-		  
-
+		 
 		  $('#reg_submit').click(function() {
-			 
 		    var validAll = true;
+		    var id = $("#id").val();
+		    var pw = $("#password").val();
+		    var name = $("#name").val();
+		    var gender = $("#gender").val();
+		    var auth = $("#auth").val();
+		    var dept = $("#dept").val();
+		    
+		    
 		    for (var i = 0; i < inval_Arr.length; i++) {
 
 		      if (inval_Arr[i] == false) { // 유효성 검사를 하나라도 통과하지 못했다면
@@ -296,17 +273,64 @@
 		        console.log(i +" : "+inval_Arr[i]);
 		      }
 		    }
+		    if (gender === '') {
+		        alert('성별을 선택해야 합니다.');
+		        return false;
+		    }
+		    if (auth === '') {
+		        alert('권한을 선택해야 합니다.');
+		        return false;
+		    }
+		    if (dept === '') {
+		        alert('부서를 선택해야 합니다.');
+		        return false;
+		    }
 
 		    if (validAll) { // 유효성 모두 통과
-		    	 $("#reg_submit").attr("disabled", false);
+		    	  $.ajax({
+		    		    type: "POST",
+		    		    url: "/join",
+		    		    data: {
+				    		id: id,
+				    		pw: pw,
+				    		name: name,
+				    		gender: gender,
+				    		auth: auth,
+				    		dept: dept
+				    	  },
+				    	dataType : "json",
+		    		    success: function(response) {
+		    		      if (response === 1) {
+		    		        // 회원가입 성공 처리
+		    		        alert("회원가입이 완료되었습니다.");
+		    		        window.location.href= '/login';
+		    		        // 필요한 추가 작업 수행
+		    		      } else {
+		    		        // 회원가입 실패 처리
+		    		        alert("회원가입에 실패했습니다.");
+		    		        // 필요한 추가 작업 수행
+		    		      }
+		    		    },
+		    		    error: function() {
+		    		      // 에러 처리
+		    		      alert("서버와의 통신에 실패했습니다.");
+		    		    }
+		    		  });
+		    
 		    } else {
 		    	 
-		      alert('기각');
+		      alert('항목을 올바르게 입력해주세요.');
 		      return false;
 		    }
 		  });
+		  
+		  
 		});
 
+	
+	 $('#cancel').click(function() {
+		 window.location.href= '/login';
+		  });
 
 	
 </script>
