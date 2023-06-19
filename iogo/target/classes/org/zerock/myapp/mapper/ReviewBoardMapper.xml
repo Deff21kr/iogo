@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.zerock.myapp.mapper.ReviewBoardMapper">
+
+    <resultMap id="reviewBoardMap" type="org.zerock.myapp.domain.ReviewBoardVO">
+        <id property="postNo" column="postno" jdbcType="INTEGER"/>
+        <result property="nickName" column="nickName"/>
+        <result property="title" column="title"/>
+        <result property="content" column="content"/>
+        <result property="readCnt" column="readcnt"/>
+        <result property="regiDate" column="regidate"/>
+        <result property="modifyDate" column="modifydate"/>
+        <result property="area" column="area"/>
+        <collection property="attachList" ofType="org.zerock.myapp.domain.AttachFileDTO">
+            <id property="uuid" column="uuid"/>
+            <result property="fileName" column="filename" />
+		    <result property="uploadPath" column="uploadpath" />
+            <result property="postNo" column="postno" jdbcType="INTEGER"/>
+        </collection>
+    </resultMap>
+    
+<!-- 
+    <collection property="attachList" resultMap="attachMap" javaType="java.util.List">
+    <resultMap type="org.zerock.myapp.domain.AttachFileDTO" id="attachMap">
+		<result property="fileName" column="filename" />
+		<result property="uploadPath" column="uploadpath" />
+		<result property="uuid" column="uuid" />
+        <result property="postNo" column="postno"/>
+	</resultMap> -->
+
+    <!-- 목록 조회 -->
+    <select id="selectList" resultMap="reviewBoardMap">
+		SELECT 
+               b.postNo		     
+             , b.nickName
+		     , b.title
+		     , b.content
+             , b.readCnt
+             , b.regiDate
+             , b.modifyDate
+             , b.area
+		     , f.fileName
+		     , f.uploadPath
+             , f.uuid
+		FROM   tbl_board_review b , tbl_reviewattach f
+        WHERE  b.postNo = f.postNo
+        ORDER BY b.postNo DESC
+    </select>
+    <!-- ORDER BY postNo DESC; -->
+
+    <!-- 상세페이지 조회 -->
+    <select id="select" resultMap="reviewBoardMap">
+		SELECT 
+               b.postNo		     
+             , b.nickName
+		     , b.title
+		     , b.content
+             , b.readCnt
+             , b.regiDate
+             , b.modifyDate
+             , b.area
+		     , f.fileName
+		     , f.uploadPath
+             , f.uuid
+		FROM   tbl_board_review b LEFT OUTER JOIN tbl_reviewattach f ON b.postNo = f.postNo
+		WHERE  b.postNo = #{postNo}
+    </select>
+
+
+    <!-- 게시물 등록 -->
+    <insert id="insert">
+        <selectKey keyProperty="postNo" order="AFTER" resultType="int">
+        SELECT "ISEQ$$_77491".CURRVAL FROM dual
+        </selectKey>
+        INSERT INTO tbl_board_review (nickName, title, content, readCnt, area) 
+        VALUES (#{nickName},#{title}, #{content},  0, #{area})
+    </insert>
+
+    <!-- 상세조회 -->
+    <!-- <select id="select" resultType="org.zerock.myapp.domain.ReviewBoardVO">
+        SELECT * 
+        FROM tbl_board_review
+        WHERE postNo = #{postNo}
+    </select> -->
+
+    <!-- 특정 게시물 삭제 -->
+    <delete id="delete">
+        DELETE FROM tbl_board_review
+        WHERE postNo = #{postNo}
+    </delete>
+
+    <!-- 특정 게시물 업데이트 -->
+    <update id="update">
+        UPDATE tbl_board_review
+        SET nickName = #{nickName},
+        	title = #{title}, 
+            content = #{content},  
+            modifyDate = current_date,
+            area = #{area}
+        WHERE postNo = #{postNo}
+    </update>
+    
+    <!-- 조회수  -->
+    <update id="updateReadcnt">
+        UPDATE tbl_board_review
+        SET readCnt = readCnt + 1
+        WHERE postNo = #{postNo}
+    </update>
+
+</mapper>

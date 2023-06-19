@@ -9,24 +9,14 @@ import org.zerock.myapp.exception.DAOException;
 public interface UserMapper {
 	
 	// 1.회원가입
-	public abstract Integer join(UserDTO user) throws DAOException;
-	
-	// 2.로그인
-//	@Select("""
-//			SELECT 
-//				id,
-//				pw,
-//				name,
-//				gender,
-//				auth,
-//				dept,
-//				regdate
-//			FROM tbl_user
-//			WHERE id = #{id} and pw = #{pw}
-//			""")
+	public abstract Integer insertUser (UserDTO user) throws DAOException;
+	// 2. id 중복체크
+	public abstract Integer selectIdCheck(String id) throws DAOException;	
+
+	// 3.로그인
 	public abstract UserVO selectUserIdPw(UserDTO user) throws DAOException;
-	
+	// 4. 1명의 유저객체 by id
 	public abstract UserVO selectUser(String id) throws DAOException;	
 	
-
+	
 }

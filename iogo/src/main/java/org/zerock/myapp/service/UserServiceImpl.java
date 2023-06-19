@@ -18,10 +18,39 @@ public class UserServiceImpl implements UserService {
 	private UserMapper mapper;
 
 	@Override
-	public Integer register(UserDTO user) {
-		
-		return null;
+	public Integer register(UserDTO user) throws ServiceException {
+		log.info("\nregister 회원가입 성공시 1을 반환\n");
+		try {
+			Integer joinUser =this.mapper.insertUser(user);
+			Objects.requireNonNull(joinUser);
+			if( joinUser==1 ) {
+				return 1;
+			} else {
+				return 0;
+			}
+		} catch (Exception e) {
+			throw new ServiceException(e);
+		}
 	} // 회원가입
+	
+	@Override
+	public Integer idCheck(String id) throws ServiceException {
+		log.info("\nidCheck : 사용가능하다면 1을 반환\n");
+		try {
+			Integer idCount =this.mapper.selectIdCheck(id);
+			Objects.requireNonNull(idCount);
+			if( idCount==1 ) {
+				log.info("중복된 아이디입니다.");
+				return 0;
+			} else {
+				log.info("사용가능한 아이디입니다.");
+				return 1;
+			}
+		} catch (Exception e) {
+			throw new ServiceException(e);
+		}
+	}  // id중복체크
+
 
 	@Override
 	public UserVO authenticate(UserDTO user) throws ServiceException {
@@ -51,6 +80,7 @@ public class UserServiceImpl implements UserService {
 		} catch (Exception e) {
 			throw new ServiceException(e);
 		}
-	} 
+	}
 
+	
 } // end class 
