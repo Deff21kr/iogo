@@ -18,5 +18,9 @@ public interface UserMapper {
 	// 4. 1명의 유저객체 by id
 	public abstract UserVO selectUser(String id) throws DAOException;	
 	
+	// 5. 회원정보 수정
+	public abstract Integer updateUser(UserDTO user) throws DAOException;
+	
+	
 	
 }

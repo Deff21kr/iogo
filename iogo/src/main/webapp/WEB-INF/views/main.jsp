@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-	
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -88,7 +87,7 @@
 			</div>
 			
 			<div class="myBtn">
-				<button type="button" id="modifyBtn">회원정보수정</button> 
+				<button type="button" id="modifyBtn" onclick="location.href='/user/modify' " >회원정보수정</button> 
 				<button type="button" id="logoutBtn">로그아웃</button> 
 			</div>
 			
@@ -96,9 +95,18 @@
 
 		
 		<div class="mainform">
-			
-			<span><button>국정감사게시판</button></span> 
-			<span><button>국정감사관리게시판</button></span> 
+		
+		   <c:if test="${SESS_AUTH_CD == '01'}">
+		   		<span><button type="button" id="boardList" >국정감사게시판</button></span> 
+           </c:if>
+           <c:if test="${SESS_AUTH_CD == '02'}">
+		   		<span><button type="button" id="boardList" >국정감사게시판</button></span> 
+				<span><button type="button" id="boardAdminList" >국정감사관리게시판</button></span> 
+           </c:if>
+           <c:if test="${SESS_AUTH_CD == '03'}">
+		   		<span><button type="button" id="boardList" >국정감사게시판</button></span> 
+           </c:if>
+		
 			
 		</div>
 		
@@ -106,10 +114,10 @@
 	</div>
 	
 <script>
-	 document.getElementById("modifyBtn").addEventListener("click", function() {
+	/*  document.getElementById("modifyBtn").addEventListener("click", function() {
 		 console.log("modify");
 		 window.location.href = "/user/modify";
-		  });
+		  }); */
 	 
 	 $(document).ready(function() {
 		  $("#logoutBtn").click(function() {
@@ -121,6 +129,7 @@
 		    	  console.log(" 1 = 성공 / 0=실패");
 		    	  console.log(response);
 		    	  if(response == 1 ) {
+		    		  alert("로그아웃 되었습니다.");
 		    		  console.log("로그아웃 성공");
 		    		  window.location.replace("/login");
 		    	  }  else {
@@ -136,7 +145,19 @@
 		    });
 		  });
 		});
-
+	 $("#boardList").click(function() {
+		 console.log("boardList");
+		 window.location.href = "${pageContext.request.contextPath }/board/list";
+	 })
+	 $("#boardAdminList").click(function() {
+		 console.log("boardAdminList");
+		 window.location.href = "${pageContext.request.contextPath }/admin/board/list";
+	 })
+	/*   $("#modifyBtn").click(function() {
+		 console.log("modifyBtn");
+		 window.location.href = "/user/modify";
+	 })
+ */
 </script>
 
 </body>

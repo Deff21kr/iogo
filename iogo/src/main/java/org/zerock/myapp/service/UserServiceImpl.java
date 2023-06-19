@@ -81,6 +81,24 @@ public class UserServiceImpl implements UserService {
 			throw new ServiceException(e);
 		}
 	}
+	@Override
+	public Integer modifyUser (UserDTO user) throws ServiceException {
+		log.info("\nmodifyUser:::: SERVICE");
+		try {
+			if(1==this.mapper.updateUser(user) ) {
+				log.info("\n\n비즈니스 계층 회원정보수정 성공\n");
+				return 1;
+			} else {
+				log.info("\n\n비즈니스 계층 회원정보수정 *** 실패 ***\n");
+				return 0;
+			}
+ 			
+		} catch (Exception e ) {
+			throw new ServiceException(e);
+		}
+		
+		
+	}
 
 	
 } // end class 

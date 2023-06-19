@@ -74,6 +74,21 @@ public class UsersMapperTests {
 		String id = "serviceTest";
 		this.mapper.selectIdCheck(id);
 	}
+	
+	@Test
+	public void testUpdateUser() throws DAOException {
+		log.trace("\nupdateUser ::::");
+		String id ="admin2@naver.com";
+		UserVO vo = this.mapper.selectUser(id);
+		UserDTO dto = vo.toDTO();
+		log.info("\ndto1 : {} ",dto);
+		dto.setDept("02");
+		log.info("\ndto2 : {} ",dto);
+		dto.setName("멍청이");
+		this.mapper.updateUser(dto);
+		log.info("\ndto3 : {} ",dto);
+		
+	}
 
 	
 

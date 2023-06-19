@@ -49,5 +49,22 @@
 			id = #{id}
 	</select>
 	
+	<update id="updateUser">
+	UPDATE tbl_user
+	SET
+		name = #{name}
+		<if test="gender != '' ">
+			,gender=#{gender}
+		</if>
+		<if test="auth != '' ">
+			,auth=#{auth}
+		</if>
+		<if test="dept != '' ">
+			,dept=#{dept}
+		</if>
+	WHERE id = #{id}
+		
+	</update>
+	
 	
 </mapper>

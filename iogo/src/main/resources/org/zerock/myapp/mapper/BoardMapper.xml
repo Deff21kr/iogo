@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.zerock.myapp.mapper.BoardMapper">
+
+    <insert id="insertBoard">
+    
+        <selectKey keyProperty="bno" order="AFTER" resultType="int">
+        SELECT "ISEQ$$_146717".CURRVAL FROM dual
+        </selectKey>
+
+        INSERT INTO tbl_board (id, title, content) 
+        VALUES (#{id}, #{title}, #{content})
+    </insert>
+    
+    <select id="selectBoard">
+    	SELECT
+    		bno,
+    		id,
+    		title,
+    		content,
+    		status
+    	FROM
+    		tbl_board
+    	WHERE
+    		bno=#{bno}
+    		
+    </select>
+
+	<select id="selectSearch" parameterType="org.zerock.myapp.domain.SearchDTO" >
+		SELECT
+	   		bno,
+	   		id,
+	   		title,
+	   		content,
+	   		status
+	   	FROM
+	   		tbl_board
+	   	WHERE
+	   		<if test="status != null and !status.isEmpty()">
+	       		(status =#{status}) AND
+	        </if>
+		    <if test="#{title} != null">
+		        title LIKE '%' || #{title} || '%' AND
+		    </if>
+	      1=1
+	
+	</select>
+    
+
+</mapper>

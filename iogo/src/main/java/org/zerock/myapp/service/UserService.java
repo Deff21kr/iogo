@@ -16,6 +16,11 @@ public interface UserService {
 	// 3. 유저 겟
 	public abstract UserVO getUser(String id) throws ServiceException;
 	
+	// 4. 회원정보수정
+	public abstract Integer modifyUser(UserDTO user) throws ServiceException;
+	
+	
+	
 	
 
 }
