@@ -114,11 +114,7 @@
 	</div>
 	
 <script>
-	/*  document.getElementById("modifyBtn").addEventListener("click", function() {
-		 console.log("modify");
-		 window.location.href = "/user/modify";
-		  }); */
-	 
+
 	 $(document).ready(function() {
 		  $("#logoutBtn").click(function() {
 		    $.ajax({
@@ -144,20 +140,21 @@
 		      }
 		    });
 		  });
+		  
+		  
+		  
 		});
 	 $("#boardList").click(function() {
 		 console.log("boardList");
 		 window.location.href = "${pageContext.request.contextPath }/board/list";
-	 })
+	 });
+	 
 	 $("#boardAdminList").click(function() {
 		 console.log("boardAdminList");
-		 window.location.href = "${pageContext.request.contextPath }/admin/board/list";
-	 })
-	/*   $("#modifyBtn").click(function() {
-		 console.log("modifyBtn");
-		 window.location.href = "/user/modify";
-	 })
- */
+		 var sessionValue = "${SESS_DEPT_CD}"
+		 window.location.href = "${pageContext.request.contextPath }/board/admin/list";
+	 });
+	
 </script>
 
 </body>

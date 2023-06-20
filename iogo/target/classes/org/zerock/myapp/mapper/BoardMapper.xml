@@ -19,15 +19,19 @@
     
     <select id="selectBoard">
     	SELECT
-    		bno,
-    		id,
-    		title,
-    		content,
-    		status
+    		b.bno,
+    		u.name,
+    		u.dept,
+    		b.id,
+    		b.title,
+    		b.content,
+    		b.status
     	FROM
-    		tbl_board
+    		tbl_board b ,tbl_user u
     	WHERE
-    		bno=#{bno}
+    		b.id=u.id
+    	AND	
+    		b.bno=#{bno}
     		
     </select>
 

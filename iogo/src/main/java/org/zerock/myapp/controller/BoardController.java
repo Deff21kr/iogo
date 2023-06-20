@@ -21,7 +21,7 @@ public class BoardController {
 	private BoardService board;
 
 	
-	@GetMapping("/list")
+	@GetMapping(value= "/list")
 	public void boardList (Model model,SearchDTO search ,RedirectAttributes rttrs) throws ControllerException {
 		log.info("\nboardList ::::: Controller\nsearch : {} ",search);
 		Boolean status = (search.getStatus() != null )&&(search.getStatus()!="");
@@ -30,17 +30,26 @@ public class BoardController {
 		
 		try {
 			if(status || title ) {
+				log.info("\nsearch : {} ",search);
 				model.addAttribute("__LIST__",this.board.getSearch(search));
-				rttrs.addAttribute("title", search.getTitle());
-				rttrs.addAttribute("status", search.getStatus());
 			} else {
 				model.addAttribute("__LIST__",this.board.getList());
 			}
-				
 			
 		} catch (Exception e) {
 			throw new ControllerException(e);
 		}
 	}
 	
+	@GetMapping("/get")
+	public void boardGet (Model model, String bno) throws ControllerException {
+		log.info("\nboardGet ::::: Controller\nbno : {} ",bno);
+		
+		try {
+			this.board.getBoard(bno);
+			model.addAttribute("__GET__", this.board.getBoard(bno));
+		} catch(Exception e) {
+			throw new ControllerException(e);
+		}
+	}
 }

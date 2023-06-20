@@ -9,7 +9,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>국정감사게시판</title>
+    <title>국정감사 관리게시판</title>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-migrate/3.4.1/jquery-migrate.min.js"></script>
@@ -20,30 +20,33 @@
 <body>
 	<div class="container">
         <div class="title">
-            <h3>국정감사게시판</h3>
+            <h3>국정감사 관리게시판</h3>
         </div>
 
         <div class="search">
-			<form action="/board/list" method="get">
-	            <div class="searchStatus">상태 : 
-	                <select name="status" id="status">
-	                    <option value="">선택</option>
-	                    <option value="0">요청중</option>
-	                    <option value="1">담당자지정</option>
-	                    <option value="2">처리완료</option>
-	                    <option value="3">보류</option>
-	                </select>
-	            </div>
+			
 	
-	            <div class="searchTitle">제목 : 
-	               <input type="text" id="title" name="title" placeholder="입력">
+	            <div class="searchTitle">부서 : 
+	               <input type="text" id="title" name="title" value="<%
+																        if (session.getAttribute("SESS_DEPT_CD") != null) {
+																            if (session.getAttribute("SESS_DEPT_CD").equals("A001")) {
+																                out.print("운영부서");
+																            } else if (session.getAttribute("SESS_DEPT_CD").equals("B001")) {
+																                out.print("지원부서");
+																            } else if (session.getAttribute("SESS_DEPT_CD").equals("C001")) {
+																                out.print("인사부서");
+																            }
+																        }
+																    %>" readonly="readonly">
 	            </div>
 	
 	            <div class="btn">
-	                <button id="submitBtn">조회</button>
+	            	<form action="/board/admin/list" method="get">
+	            		 <button id="submitBtn">조회</button>
+	            		 <input type="hidden" name="dept" value="${SESS_DEPT_CD }" >
+	            	</form>
 	                <button type="button" onclick="location.href='/main'" >메인페이지</button>
 	            </div>
-            </form>
         </div>
             
         <div clasee="main">
@@ -59,7 +62,7 @@
                     </tr>
                 </thead>
                 
-                  <c:forEach items="${__LIST__ }" var="board">
+                  <c:forEach items="${__ADMIN__ }" var="board">
                     <tr>
                         <td>${board.bno}</td>
                         <td>${board.id}</td>

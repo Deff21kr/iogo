@@ -23,7 +23,6 @@ public interface BoardMapper {
 				tbl_board
 			""")
 	public abstract List<BoardDTO> selectList() throws DAOException;
-	
 	// 2. 게시글 등록
 	public abstract Integer insertBoard(BoardDTO dto) throws DAOException;
 	// 3. 게시글 조회
