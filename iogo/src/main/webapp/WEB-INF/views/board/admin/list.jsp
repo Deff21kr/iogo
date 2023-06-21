@@ -67,7 +67,7 @@
                         <td>${board.bno}</td>
                         <td>${board.id}</td>
                         <td>
-                            <a class='move' href='/board/get?bno=${board.bno }'>${board.title} </a>
+                            <a class='move' href='/board/admin/get?bno=${board.bno }'>${board.title} </a>
                         </td>
                         <td>${board.content}</td>
                         <c:choose>

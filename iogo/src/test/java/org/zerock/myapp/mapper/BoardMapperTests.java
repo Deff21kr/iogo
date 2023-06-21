@@ -47,7 +47,7 @@ public class BoardMapperTests {
 	public void insertBoard() throws DAOException {
 		log.trace("\ninsertBoard:::: ");
 		BoardDTO dto = new BoardDTO();
-		dto.setId("admin2@naver.com");
+		dto.setId("test555@naver.com");
 		dto.setTitle("테스트e");
 		dto.setContent("ㅎ2ㅎㅇ하이");
 		dto.setStatus("2");

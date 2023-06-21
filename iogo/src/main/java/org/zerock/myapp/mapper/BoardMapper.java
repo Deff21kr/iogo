@@ -13,7 +13,7 @@ public interface BoardMapper {
 	
 	// 1. 게시판 조회
 	@Select("""
-			SELECT 
+			SELECT /*+ index_desc(tbl_board) */
 				bno,
 				id,
 				title,

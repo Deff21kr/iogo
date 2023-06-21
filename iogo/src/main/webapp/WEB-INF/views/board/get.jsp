@@ -91,7 +91,12 @@
 					<div class="bContent">이름 : </div> <div>${__GET__.name }</div>
 				</div>
 				<div class="board" id="dept">
-					<div class="bContent">부서 : </div> <div>${__GET__.dept }</div>
+					<div class="bContent">부서 : </div>
+					<c:choose>
+						<c:when test="${__GET__.dept =='A001'}"><div>운영부서</div></c:when>
+						<c:when test="${__GET__.dept =='B001'}"><div>지원부서</div></c:when>
+						<c:when test="${__GET__.dept =='C001'}"><div>인사부서</div></c:when>
+					</c:choose> 
 				</div>
 				<div class="board" id="status">
 					<div class="bContent">상태 : </div> 

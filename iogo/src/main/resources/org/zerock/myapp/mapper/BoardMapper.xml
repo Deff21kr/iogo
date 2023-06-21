@@ -25,7 +25,8 @@
     		b.id,
     		b.title,
     		b.content,
-    		b.status
+    		b.status,
+    		b.sup
     	FROM
     		tbl_board b ,tbl_user u
     	WHERE
